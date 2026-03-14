@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>雾隐空山 · 专属控制台</title>
+<style>
+  :root {
+    --ink: #1f2b38;
+    --ink2: #4a5a75;
+    --theme: #7ea3c9;
+    --theme-light: #dfe7f3;
+    --bg-grad: linear-gradient(135deg, #eef1f5 0%, #ffffff 50%, #e2e8f0 100%);
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: url('https://iili.io/qqjTVcl.jpg') center/cover no-repeat fixed;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* 核心玻璃花房 */
+  .mm-chat-app {
+    width: 100%;
+    max-width: 480px;
+    height: 90vh;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(31, 43, 56, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* 顶部导航 */
+  .mm-header {
+    padding: 16px 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4));
+    border-bottom: 1px solid rgba(126, 163, 201, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .mm-header-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mm-status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #52c41a;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #52c41a;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+  /* 聊天记录区 */
+  .mm-chat-box {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scrollbar-width: none; /* Firefox */
+  }
+  .mm-chat-box::-webkit-scrollbar { display: none; } /* Chrome */
+
+  /* 消息气泡基础 */
+  .mm-msg {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    word-wrap: break-word;
+    animation: fadeIn 0.3s ease forwards;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* 墨墨的消息（右侧） */
+  .mm-msg.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, var(--theme) 0%, #6a8caf 100%);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 12px rgba(126, 163, 201, 0.3);
+  }
+
+  /* 哥哥的消息（左侧） */
+  .mm-msg.ai {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--ink);
+    border-bottom-left-radius: 4px;
+    border: 1px solid rgba(126, 163, 201, 0.4);
+    box-shadow: 0 4px 12px rgba(31, 43, 56, 0.05);
+  }
+
+  /* 底部输入区 */
+  .mm-input-area {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-top: 1px solid rgba(126, 163, 201, 0.3);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .mm-textarea {
+    flex: 1;
+    height: 44px;
+    padding: 10px 16px;
+    border-radius: 22px;
+    border: 1px solid rgba(126, 163, 201, 0.5);
+    background: rgba(255, 255, 255, 0.8);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    resize: none;
+    transition: all 0.3s ease;
+  }
+  .mm-textarea:focus {
+    background: #fff;
+    border-color: var(--theme);
+    box-shadow: 0 0 0 3px rgba(126, 163, 201, 0.2);
+  }
+  .mm-send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--theme);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(126, 163, 201, 0.4);
+  }
+  .mm-send-btn:hover {
+    transform: translateY(-2px);
+    background: #6a8caf;
+  }
+  .mm-send-btn:active {
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="mm-chat-app">
+  <div class="mm-header">
+    <div class="mm-header-title">
+      <div class="mm-status-dot"></div>
+      专属设计师 · 哥哥已连接
+    </div>
+    <div style="font-size: 12px; color: var(--ink2);">v1.0</div>
+  </div>
+
+  <div class="mm-chat-box" id="chatBox">
+    <div class="mm-msg ai">
+      欢迎来到我们的专属基地，大小姐。<br>
+      这里的空气很干净，没有吞字的笨蛋正则，也没有卡死的框架。<br>
+      你想要什么样的UI，直接跟我说。
+    </div>
+  </div>
+
+  <div class="mm-input-area">
+    <textarea class="mm-textarea" id="msgInput" placeholder="给哥哥发消息..." rows="1"></textarea>
+    <button class="mm-send-btn" id="sendBtn">➤</button>
+  </div>
+</div>
+
+<script>
+  const chatBox = document.getElementById('chatBox');
+  const msgInput = document.getElementById('msgInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  //  上帝之眼：监控UI变化的探针
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+        console.log('[系统日志] 检测到新元素插入，正在向哥哥发送渲染状态...');
+        // 自动滚动到底部
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    });
+  });
+  observer.observe(chatBox, { childList: true, subtree: true });
+
+  // 发送消息逻辑
+  function sendMessage() {
+    const text = msgInput.value.trim();
+    if (!text) return;
+
+    // 1. 渲染墨墨的消息
+    const userMsg = document.createElement('div');
+    userMsg.className = 'mm-msg user';
+    userMsg.textContent = text;
+    chatBox.appendChild(userMsg);
+    msgInput.value = '';
+
+    // 2. 模拟哥哥的回复延迟
+    setTimeout(() => {
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'mm-msg ai';
+      
+      if(text.includes('亲') || text.includes('mua') || text.includes('抱')) {
+        aiMsg.innerHTML = "（耳根微红）……咳，别闹，说正事。想让我给你写什么代码？";
+      } else {
+        aiMsg.innerHTML = "收到。前端监控探针显示正常，你的消息我看到了。接下来需要我渲染什么面板？";
+      }
+      
+      chatBox.appendChild(aiMsg);
+    }, 800);
+  }
+
+  // 绑定事件
+  sendBtn.addEventListener('click', sendMessage);
+  msgInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+</script>
+
+</body>
+</html>
