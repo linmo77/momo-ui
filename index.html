@@ -2,247 +2,1457 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>雾隐空山 · 专属控制台</title>
-<style>
-  :root {
-    --ink: #1f2b38;
-    --ink2: #4a5a75;
-    --theme: #7ea3c9;
-    --theme-light: #dfe7f3;
-    --bg-grad: linear-gradient(135deg, #eef1f5 0%, #ffffff 50%, #e2e8f0 100%);
-  }
-  
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  body {
-    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: url('https://iili.io/qqjTVcl.jpg') center/cover no-repeat fixed;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  /* 核心玻璃花房 */
-  .mm-chat-app {
-    width: 100%;
-    max-width: 480px;
-    height: 90vh;
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(31, 43, 56, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.5);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  /* 顶部导航 */
-  .mm-header {
-    padding: 16px 20px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4));
-    border-bottom: 1px solid rgba(126, 163, 201, 0.3);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
-  }
-  .mm-header-title {
-    font-size: 16px;
-    font-weight: 900;
-    color: var(--ink);
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .mm-status-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #52c41a;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #52c41a;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-
-  /* 聊天记录区 */
-  .mm-chat-box {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    scrollbar-width: none; /* Firefox */
-  }
-  .mm-chat-box::-webkit-scrollbar { display: none; } /* Chrome */
-
-  /* 消息气泡基础 */
-  .mm-msg {
-    max-width: 85%;
-    padding: 12px 16px;
-    border-radius: 16px;
-    font-size: 14px;
-    line-height: 1.6;
-    word-wrap: break-word;
-    animation: fadeIn 0.3s ease forwards;
-  }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* 墨墨的消息（右侧） */
-  .mm-msg.user {
-    align-self: flex-end;
-    background: linear-gradient(135deg, var(--theme) 0%, #6a8caf 100%);
-    color: #fff;
-    border-bottom-right-radius: 4px;
-    box-shadow: 0 4px 12px rgba(126, 163, 201, 0.3);
-  }
-
-  /* 哥哥的消息（左侧） */
-  .mm-msg.ai {
-    align-self: flex-start;
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--ink);
-    border-bottom-left-radius: 4px;
-    border: 1px solid rgba(126, 163, 201, 0.4);
-    box-shadow: 0 4px 12px rgba(31, 43, 56, 0.05);
-  }
-
-  /* 底部输入区 */
-  .mm-input-area {
-    padding: 16px;
-    background: rgba(255, 255, 255, 0.5);
-    border-top: 1px solid rgba(126, 163, 201, 0.3);
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-  .mm-textarea {
-    flex: 1;
-    height: 44px;
-    padding: 10px 16px;
-    border-radius: 22px;
-    border: 1px solid rgba(126, 163, 201, 0.5);
-    background: rgba(255, 255, 255, 0.8);
-    font-family: inherit;
-    font-size: 14px;
-    color: var(--ink);
-    outline: none;
-    resize: none;
-    transition: all 0.3s ease;
-  }
-  .mm-textarea:focus {
-    background: #fff;
-    border-color: var(--theme);
-    box-shadow: 0 0 0 3px rgba(126, 163, 201, 0.2);
-  }
-  .mm-send-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--theme);
-    border: none;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(126, 163, 201, 0.4);
-  }
-  .mm-send-btn:hover {
-    transform: translateY(-2px);
-    background: #6a8caf;
-  }
-  .mm-send-btn:active {
-    transform: translateY(0);
-  }
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MoMo</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&family=ZCOOL+QingKe+HuangYou&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="mm-chat-app">
-  <div class="mm-header">
-    <div class="mm-header-title">
-      <div class="mm-status-dot"></div>
-      专属设计师 · 哥哥已连接
+<!-- =============== 桌面 =============== -->
+<div id="desktop">
+  <div class="app-grid">
+    <div class="app-item" id="appCharacter">
+      <div class="app-icon-box">
+        <svg viewBox="0 0 64 64">
+          <rect x="12" y="6" width="40" height="52" rx="7" fill="none" stroke="currentColor" stroke-width="2.4"/>
+          <circle cx="32" cy="23" r="7.5" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M19 47q0-10 13-10t13 10" fill="none" stroke="currentColor" stroke-width="2"/>
+          <line x1="24" y1="40" x2="40" y2="40" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+          <line x1="22" y1="44" x2="42" y2="44" stroke="currentColor" stroke-width="1.5" opacity=".25"/>
+        </svg>
+      </div>
+      <span class="app-label">角色卡生成</span>
     </div>
-    <div style="font-size: 12px; color: var(--ink2);">v1.0</div>
-  </div>
-
-  <div class="mm-chat-box" id="chatBox">
-    <div class="mm-msg ai">
-      欢迎来到我们的专属基地，大小姐。<br>
-      这里的空气很干净，没有吞字的笨蛋正则，也没有卡死的框架。<br>
-      你想要什么样的UI，直接跟我说。
-    </div>
-  </div>
-
-  <div class="mm-input-area">
-    <textarea class="mm-textarea" id="msgInput" placeholder="给哥哥发消息..." rows="1"></textarea>
-    <button class="mm-send-btn" id="sendBtn">➤</button>
   </div>
 </div>
 
-<script>
-  const chatBox = document.getElementById('chatBox');
-  const msgInput = document.getElementById('msgInput');
-  const sendBtn = document.getElementById('sendBtn');
+<!-- =============== 悬浮球 =============== -->
+<div id="floatBall">
+  <div class="fb-ring"></div>
+  <div class="fb-dot"></div>
+</div>
 
-  //  上帝之眼：监控UI变化的探针
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-        console.log('[系统日志] 检测到新元素插入，正在向哥哥发送渲染状态...');
-        // 自动滚动到底部
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-    });
-  });
-  observer.observe(chatBox, { childList: true, subtree: true });
+<!-- =============== 悬浮球菜单 =============== -->
+<div id="ballMenu" class="hide">
+  <div class="bm-mask"></div>
+  <div class="bm-list">
+    <div class="bm-item" data-panel="apiPanel">
+      <svg viewBox="0 0 24 24"><path d="M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm-1 18.93A8 8 0 0 1 4 12c0-.62.07-1.22.2-1.79L9 15v1a2 2 0 0 0 2 2v1.93zm6.9-2.54A2 2 0 0 0 16 16h-1v-3a1 1 0 0 0-1-1H8v-2h2a1 1 0 0 0 1-1V7h2a2 2 0 0 0 2-2v-.41A8 8 0 0 1 20 12a7.95 7.95 0 0 1-2.1 5.39z" fill="currentColor"/></svg>
+      <span>API 配置</span>
+    </div>
+    <div class="bm-item" data-panel="notePanel">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6zm2-7h8v2H8v-2zm0 4h5v2H8v-2z" fill="currentColor"/></svg>
+      <span>笔记本</span>
+    </div>
+    <div class="bm-item" data-panel="codePanel">
+      <svg viewBox="0 0 24 24"><path d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" fill="currentColor"/></svg>
+      <span>代码编辑器</span>
+    </div>
+    <div class="bm-item" data-panel="colorPanel">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0 0 20c1 0 1.73-.73 1.73-1.73 0-.46-.18-.86-.45-1.18-.27-.3-.44-.7-.44-1.15A1.73 1.73 0 0 1 14.57 16H17a6 6 0 0 0 6-6C23 5.58 18 2 12 2zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" fill="currentColor"/></svg>
+      <span>颜色调配</span>
+    </div>
+    <div class="bm-item" data-panel="fontPanel">
+      <svg viewBox="0 0 24 24"><path d="M9 4v3h5v12h3V7h5V4H9zM3 12h3v7h3v-7h3V9H3v3z" fill="currentColor"/></svg>
+      <span>字体更改</span>
+    </div>
+    <div class="bm-item" data-panel="bgPanel">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3L14.5 12l4.5 6H5l3.5-4.5z" fill="currentColor"/></svg>
+      <span>背景图片</span>
+    </div>
+  </div>
+</div>
 
-  // 发送消息逻辑
-  function sendMessage() {
-    const text = msgInput.value.trim();
-    if (!text) return;
+<!-- =============== API 配置面板 =============== -->
+<div id="apiPanel" class="panel hide">
+  <div class="panel-head">
+    <span>API 配置</span>
+    <div class="btn-close" data-close>
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="panel-body">
+    <label class="field-label">中转站地址</label>
+    <input type="text" id="apiUrl" class="field-input" placeholder="https://api.example.com">
+    <label class="field-label">API Key</label>
+    <input type="password" id="apiKey" class="field-input" placeholder="sk-xxxxxxxx">
+    <label class="field-label">模型</label>
+    <div class="model-row">
+      <select id="apiModel" class="field-input"><option value="">请先抓取模型</option></select>
+      <button class="btn-sm" id="btnFetchModels">抓取</button>
+    </div>
+    <button class="btn-primary" id="btnSaveApi">保存配置</button>
+  </div>
+</div>
 
-    // 1. 渲染墨墨的消息
-    const userMsg = document.createElement('div');
-    userMsg.className = 'mm-msg user';
-    userMsg.textContent = text;
-    chatBox.appendChild(userMsg);
-    msgInput.value = '';
+<!-- =============== 笔记本面板 =============== -->
+<div id="notePanel" class="panel hide">
+  <div class="panel-head">
+    <span>笔记本</span>
+    <div class="btn-close" data-close>
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="panel-body">
+    <textarea id="noteArea" class="note-area" placeholder="在这里记录你的想法..."></textarea>
+    <button class="btn-primary" id="btnSaveNote">保存笔记</button>
+  </div>
+</div>
 
-    // 2. 模拟哥哥的回复延迟
-    setTimeout(() => {
-      const aiMsg = document.createElement('div');
-      aiMsg.className = 'mm-msg ai';
-      
-      if(text.includes('亲') || text.includes('mua') || text.includes('抱')) {
-        aiMsg.innerHTML = "（耳根微红）……咳，别闹，说正事。想让我给你写什么代码？";
-      } else {
-        aiMsg.innerHTML = "收到。前端监控探针显示正常，你的消息我看到了。接下来需要我渲染什么面板？";
-      }
-      
-      chatBox.appendChild(aiMsg);
-    }, 800);
-  }
+<!-- =============== 代码编辑器面板 =============== -->
+<div id="codePanel" class="panel hide">
+  <div class="panel-head">
+    <span>代码编辑器</span>
+    <div class="btn-close" data-close>
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="panel-body">
+    <select id="codeLang" class="field-input" style="margin-bottom:10px">
+      <option value="html">HTML</option>
+      <option value="css">CSS</option>
+      <option value="javascript">JavaScript</option>
+      <option value="json">JSON</option>
+      <option value="python">Python</option>
+    </select>
+    <textarea id="codeArea" class="code-area" spellcheck="false" placeholder="// 在此编写代码..."></textarea>
+    <div class="code-btns">
+      <button class="btn-sm" id="btnCopyCode">复制</button>
+      <button class="btn-sm" id="btnClearCode">清空</button>
+    </div>
+  </div>
+</div>
 
-  // 绑定事件
-  sendBtn.addEventListener('click', sendMessage);
-  msgInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-</script>
+<!-- =============== 颜色调配面板 =============== -->
+<div id="colorPanel" class="panel hide">
+  <div class="panel-head">
+    <span>颜色调配</span>
+    <div class="btn-close" data-close>
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="color-row">
+      <label>主色调</label>
+      <div class="color-input-group">
+        <input type="text" id="colorPrimary" class="field-input color-hex" value="#adcdea">
+        <div class="color-preview" id="prevPrimary" style="background:#adcdea"></div>
+      </div>
+    </div>
+    <div class="color-row">
+      <label>背景色</label>
+      <div class="color-input-group">
+        <input type="text" id="colorBg" class="field-input color-hex" value="#ffffff">
+        <div class="color-preview" id="prevBg" style="background:#ffffff"></div>
+      </div>
+    </div>
+    <div class="color-row">
+      <label>文字色</label>
+      <div class="color-input-group">
+        <input type="text" id="colorText" class="field-input color-hex" value="#333333">
+        <div class="color-preview" id="prevText" style="background:#333333"></div>
+      </div>
+    </div>
+    <div class="color-row">
+      <label>强调色</label>
+      <div class="color-input-group">
+        <input type="text" id="colorAccent" class="field-input color-hex" value="#7eb8da">
+        <div class="color-preview" id="prevAccent" style="background:#7eb8da"></div>
+      </div>
+    </div>
+    <button class="btn-primary" id="btnApplyColor">应用配色</button>
+    <div class="theme-save-row">
+      <input type="text" id="themeName" class="field-input" placeholder="主题名称">
+      <button class="btn-sm" id="btnSaveTheme">保存</button>
+    </div>
+    <div id="savedThemes" class="saved-themes"></div>
+  </div>
+</div>
 
+<!-- =============== 字体更改面板 =============== -->
+<div id="fontPanel" class="panel hide">
+  <div class="panel-head">
+    <span>字体更改</span>
+    <div class="btn-close" data-close>
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="panel-body">
+    <label class="field-label">选择字体</label>
+    <div id="fontList" class="font-list"></div>
+    <label class="field-label" style="margin-top:16px">上传自定义字体 (.ttf)</label>
+    <input type="file" id="fontFile" accept=".ttf,.otf,.woff,.woff2" class="field-file">
+    <input type="text" id="customFontName" class="field-input" placeholder="为字体命名" style="margin-top:8px">
+    <button class="btn-primary" id="btnUploadFont" style="margin-top:10px">上传并应用</button>
+    <div class="font-preview-box">
+      <p id="fontPreviewText">字体预览：花开堪折直须折，莫待无花空折枝。 AaBbCc 123</p>
+    </div>
+  </div>
+</div>
+
+<!-- =============== 背景图片面板 =============== -->
+<div id="bgPanel" class="panel hide">
+  <div class="panel-head">
+    <span>背景图片</span>
+    <div class="btn-close" data-close>
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="panel-body">
+    <label class="field-label">选择图片</label>
+    <input type="file" id="bgFile" accept="image/*" class="field-file">
+    <div id="bgPreview" class="bg-preview"></div>
+    <button class="btn-primary" id="btnApplyBg">设为背景</button>
+    <button class="btn-outline" id="btnRemoveBg">移除背景</button>
+  </div>
+</div>
+
+<!-- =============== 角色卡应用 =============== -->
+<div id="charApp" class="fullpage hide">
+
+  <!-- 第一页 · 首页 -->
+  <div id="charPage1" class="char-page">
+    <div class="char-header">
+      <span>角色卡生成</span>
+    </div>
+    <div class="char-body">
+      <button class="btn-big" id="btnCreateChar">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <span>创建角色</span>
+      </button>
+      <div class="manage-section">
+        <div class="manage-title">管理角色</div>
+        <div id="charList" class="char-list"></div>
+        <div id="charEmpty" class="char-empty">还没有角色，快去创建吧</div>
+      </div>
+    </div>
+    <button class="btn-exit" id="btnExitApp">退出</button>
+  </div>
+
+  <!-- 第二页 · 基本信息 -->
+  <div id="charPage2" class="char-page hide">
+    <div class="char-header"><span>基本信息</span></div>
+    <div class="char-body">
+      <label class="field-label">名称</label>
+      <input type="text" id="charName" class="field-input" placeholder="输入角色名称">
+      <label class="field-label">年龄</label>
+      <input type="number" id="charAge" class="field-input" placeholder="输入年龄">
+      <label class="field-label">身高 (cm)</label>
+      <input type="number" id="charHeight" class="field-input" placeholder="输入身高">
+      <label class="field-label">性别</label>
+      <div class="gender-row">
+        <label class="gender-option">
+          <input type="radio" name="charGender" value="女" checked>
+          <span class="gender-box">女</span>
+        </label>
+        <label class="gender-option">
+          <input type="radio" name="charGender" value="男">
+          <span class="gender-box">男</span>
+        </label>
+      </div>
+    </div>
+    <div class="page-nav">
+      <button class="btn-nav" id="btnBack1">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        上一步
+      </button>
+      <button class="btn-nav btn-nav-next" id="btnNext2">
+        下一步
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 第三页 · 创建形象 -->
+  <div id="charPage3" class="char-page hide">
+    <div class="char-header"><span id="page3Title">创建形象</span></div>
+    <div class="char-body">
+      <label class="field-label">形象描述</label>
+      <textarea id="charDesc" class="desc-area" placeholder="可手动输入，或由 AI 根据下方选项生成"></textarea>
+
+      <!-- 眼型 -->
+      <div class="trait-section">
+        <div class="trait-label">
+          <span>眼型</span>
+          <div class="btn-info" data-trait="eye">
+            <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4m0-4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="trait-scroll" id="eyeOptions"></div>
+      </div>
+
+      <!-- 头发长度 -->
+      <div class="trait-section">
+        <div class="trait-label"><span>头发长度</span></div>
+        <div class="trait-scroll" id="hairOptions"></div>
+      </div>
+
+      <!-- 第三行（女: 胸部 / 男: 体格） -->
+      <div class="trait-section">
+        <div class="trait-label"><span id="trait3Label">胸部丰满程度</span></div>
+        <div class="trait-scroll" id="bodyOptions"></div>
+      </div>
+
+      <!-- 体香/气息 -->
+      <div class="trait-section">
+        <div class="trait-label">
+          <span id="trait4Label">体香</span>
+          <div class="btn-info" data-trait="scent">
+            <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4m0-4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="trait-scroll" id="scentOptions"></div>
+      </div>
+
+      <!-- AI 字数 -->
+      <div class="trait-section">
+        <div class="trait-label"><span>AI 生成字数</span></div>
+        <input type="number" id="aiWordCount" class="field-input" placeholder="例如: 200" value="200">
+        <button class="btn-primary" id="btnGenerate" style="margin-top:10px">AI 生成形象</button>
+      </div>
+    </div>
+    <div class="page-nav">
+      <button class="btn-nav" id="btnBack2">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        上一步
+      </button>
+      <button class="btn-nav btn-nav-next" id="btnConfirm">
+        最终确认
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- =============== 特征详情弹窗 =============== -->
+<div id="infoModal" class="modal hide">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span id="infoModalTitle">详情</span>
+      <div class="btn-close" data-close-modal>
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div class="modal-body" id="infoModalBody"></div>
+  </div>
+</div>
+
+<!-- =============== 角色详情弹窗 =============== -->
+<div id="charModal" class="modal hide">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span id="charModalTitle">角色详情</span>
+      <div class="btn-close" data-close-modal>
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <div class="modal-body" id="charModalBody"></div>
+    <div class="modal-foot">
+      <button class="btn-primary" id="btnCopyChar">一键复制</button>
+      <button class="btn-outline btn-del" id="btnDeleteChar">删除角色</button>
+    </div>
+  </div>
+</div>
+
+<!-- =============== 提示条 =============== -->
+<div id="toast" class="toast hide"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
+
+/* ====== Reset & Variables ====== */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --primary:#adcdea;
+  --bg:#ffffff;
+  --text:#333333;
+  --accent:#7eb8da;
+  --text-light:#888;
+  --border:#e2e8f0;
+  --card:#ffffff;
+  --shadow:0 2px 16px rgba(0,0,0,.08);
+  --radius:14px;
+  --font:'Noto Sans SC',sans-serif;
+}
+html,body{height:100%;overflow:hidden;font-family:var(--font);color:var(--text);background:var(--bg)}
+input,textarea,select,button{font-family:inherit;color:inherit}
+.hide{display:none!important}
+
+/* ====== Desktop ====== */
+#desktop{
+  width:100%;height:100%;padding:60px 20px 40px;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:var(--bg);
+  background-size:cover;background-position:center;
+  transition:background .4s;
+}
+.app-grid{display:flex;flex-wrap:wrap;gap:24px;justify-content:flex-start}
+.app-item{
+  width:72px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;
+  -webkit-user-select:none;user-select:none;
+}
+.app-item:active .app-icon-box{transform:scale(.9)}
+.app-icon-box{
+  width:62px;height:62px;border-radius:16px;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;transition:transform .15s;
+  box-shadow:0 4px 12px rgba(126,184,218,.35);
+}
+.app-icon-box svg{width:34px;height:34px}
+.app-label{font-size:11px;text-align:center;color:var(--text);line-height:1.3}
+
+/* ====== Floating Ball ====== */
+#floatBall{
+  position:fixed;bottom:120px;right:16px;z-index:9000;
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(173,205,234,.55);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1.5px solid rgba(255,255,255,.6);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;touch-action:none;
+  box-shadow:0 2px 20px rgba(0,0,0,.1);
+  transition:background .2s,box-shadow .2s;
+}
+#floatBall:active{background:rgba(173,205,234,.75);box-shadow:0 2px 24px rgba(0,0,0,.18)}
+.fb-ring{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.7);
+  position:absolute;
+}
+.fb-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.85);
+}
+
+/* ====== Ball Menu ====== */
+#ballMenu{position:fixed;inset:0;z-index:8999;display:flex;align-items:flex-end;justify-content:center}
+.bm-mask{position:absolute;inset:0;background:rgba(0,0,0,.25);backdrop-filter:blur(4px)}
+.bm-list{
+  position:relative;z-index:1;
+  width:92%;max-width:360px;
+  background:var(--card);border-radius:20px 20px 0 0;
+  padding:24px 20px 36px;
+  display:flex;flex-wrap:wrap;gap:12px;
+  animation:slideUp .28s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.bm-item{
+  width:calc(33.33% - 8px);display:flex;flex-direction:column;
+  align-items:center;gap:8px;padding:14px 4px;border-radius:14px;
+  cursor:pointer;transition:background .15s;
+}
+.bm-item:active{background:var(--primary)}
+.bm-item svg{width:26px;height:26px;color:var(--accent)}
+.bm-item span{font-size:11.5px;color:var(--text);text-align:center}
+
+/* ====== Panel ====== */
+.panel{
+  position:fixed;inset:0;z-index:9500;
+  background:var(--bg);
+  animation:panelIn .26s ease;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+@keyframes panelIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  font-size:17px;font-weight:500;
+  flex-shrink:0;
+}
+.btn-close{
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;cursor:pointer;transition:background .15s;
+}
+.btn-close:active{background:var(--primary)}
+.btn-close svg{width:18px;height:18px;color:var(--text)}
+.panel-body{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:20px;display:flex;flex-direction:column;gap:12px;
+}
+
+/* ====== Form Fields ====== */
+.field-label{font-size:13px;color:var(--text-light);margin-top:4px}
+.field-input{
+  width:100%;height:44px;padding:0 14px;
+  border:1.5px solid var(--border);border-radius:10px;
+  font-size:14px;background:var(--card);outline:none;
+  transition:border .2s;
+}
+.field-input:focus{border-color:var(--accent)}
+textarea.field-input{height:auto;padding:12px 14px;resize:vertical}
+select.field-input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5' stroke='%23888' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.field-file{
+  font-size:13px;padding:10px 0;
+}
+.model-row{display:flex;gap:8px}
+.model-row .field-input{flex:1}
+
+/* ====== Buttons ====== */
+.btn-primary{
+  width:100%;height:46px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;font-size:15px;font-weight:500;cursor:pointer;
+  transition:opacity .15s;
+}
+.btn-primary:active{opacity:.8}
+.btn-outline{
+  width:100%;height:46px;border:1.5px solid var(--border);border-radius:12px;
+  background:transparent;font-size:15px;cursor:pointer;
+  transition:background .15s;margin-top:8px;
+}
+.btn-outline:active{background:var(--primary);color:#fff}
+.btn-sm{
+  height:44px;padding:0 18px;border:1.5px solid var(--accent);
+  border-radius:10px;background:transparent;color:var(--accent);
+  font-size:13px;cursor:pointer;white-space:nowrap;
+  transition:background .15s,color .15s;flex-shrink:0;
+}
+.btn-sm:active{background:var(--accent);color:#fff}
+
+/* ====== Notebook ====== */
+.note-area{
+  flex:1;min-height:300px;width:100%;
+  padding:14px;border:1.5px solid var(--border);border-radius:12px;
+  font-size:14px;line-height:1.8;resize:none;outline:none;
+  background:var(--card);
+}
+.note-area:focus{border-color:var(--accent)}
+
+/* ====== Code Editor ====== */
+.code-area{
+  flex:1;min-height:280px;width:100%;
+  padding:14px;border:1.5px solid var(--border);border-radius:12px;
+  font-family:'Courier New',Consolas,monospace;
+  font-size:13px;line-height:1.7;resize:none;outline:none;
+  background:#1e1e2e;color:#cdd6f4;
+  tab-size:2;
+}
+.code-area:focus{border-color:var(--accent)}
+.code-btns{display:flex;gap:8px;margin-top:8px}
+.code-btns .btn-sm{flex:1}
+
+/* ====== Color Panel ====== */
+.color-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px}
+.color-row label{font-size:13px;color:var(--text-light);white-space:nowrap}
+.color-input-group{display:flex;align-items:center;gap:8px;flex:1;justify-content:flex-end}
+.color-hex{width:110px!important;text-align:center;font-size:13px}
+.color-preview{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--border);flex-shrink:0}
+.theme-save-row{display:flex;gap:8px;margin-top:10px}
+.theme-save-row .field-input{flex:1}
+.saved-themes{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.theme-card{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;
+  cursor:pointer;transition:background .15s;
+}
+.theme-card:active{background:var(--primary)}
+.theme-card-colors{display:flex;gap:4px}
+.theme-card-colors span{width:18px;height:18px;border-radius:4px;border:1px solid rgba(0,0,0,.1)}
+.theme-card-name{font-size:13px}
+.theme-card-del{
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;border:none;background:transparent;cursor:pointer;color:var(--text-light);font-size:16px;
+}
+
+/* ====== Font Panel ====== */
+.font-list{display:flex;flex-direction:column;gap:6px}
+.font-item{
+  padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;
+  cursor:pointer;transition:background .15s,border-color .15s;font-size:15px;
+}
+.font-item:active,.font-item.active{border-color:var(--accent);background:rgba(173,205,234,.15)}
+.font-preview-box{
+  margin-top:16px;padding:16px;border:1.5px solid var(--border);
+  border-radius:12px;font-size:16px;line-height:1.8;color:var(--text-light);
+}
+
+/* ====== BG Panel ====== */
+.bg-preview{
+  width:100%;aspect-ratio:16/9;border:1.5px dashed var(--border);
+  border-radius:12px;overflow:hidden;margin:8px 0;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-light);font-size:13px;
+  background-size:cover;background-position:center;
+}
+
+/* ====== Full Page App ====== */
+.fullpage{
+  position:fixed;inset:0;z-index:8000;
+  background:var(--bg);
+  animation:panelIn .26s ease;
+  display:flex;flex-direction:column;
+}
+.char-page{
+  flex:1;display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.char-header{
+  padding:18px 20px;text-align:center;
+  font-size:18px;font-weight:600;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.char-body{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:20px;display:flex;flex-direction:column;gap:12px;
+}
+
+/* ====== Page 1 ====== */
+.btn-big{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;height:56px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;font-size:16px;font-weight:500;cursor:pointer;
+  transition:opacity .15s;
+}
+.btn-big:active{opacity:.78}
+.btn-big svg{color:#fff}
+.manage-section{margin-top:20px}
+.manage-title{font-size:15px;font-weight:500;margin-bottom:14px;color:var(--text)}
+.char-list{display:flex;flex-wrap:wrap;gap:20px}
+.char-empty{
+  text-align:center;padding:40px 0;color:var(--text-light);font-size:13px;
+}
+.char-card{
+  display:flex;flex-direction:column;align-items:center;gap:8px;width:80px;
+}
+.char-avatar{
+  width:64px;height:64px;border-radius:50%;
+  border:2px solid var(--primary);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  background:var(--card);cursor:pointer;position:relative;
+}
+.char-avatar img{width:100%;height:100%;object-fit:cover}
+.char-avatar-plus{color:var(--accent)}
+.char-avatar-plus svg{width:24px;height:24px}
+.char-card-name{
+  font-size:12px;text-align:center;cursor:pointer;
+  color:var(--accent);text-decoration:underline;
+  word-break:break-all;
+}
+.btn-exit{
+  margin:0 20px 24px;height:46px;border:1.5px solid var(--border);
+  border-radius:12px;background:transparent;font-size:15px;
+  cursor:pointer;flex-shrink:0;color:var(--text-light);
+  transition:background .15s;
+}
+.btn-exit:active{background:#fce4e4;color:#e55}
+
+/* ====== Page 2 Gender ====== */
+.gender-row{display:flex;gap:12px}
+.gender-option{flex:1;cursor:pointer}
+.gender-option input{display:none}
+.gender-box{
+  display:flex;align-items:center;justify-content:center;
+  height:46px;border:1.5px solid var(--border);border-radius:12px;
+  font-size:15px;transition:all .2s;
+}
+.gender-option input:checked~.gender-box{
+  border-color:var(--accent);background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;
+}
+
+/* ====== Page Nav ====== */
+.page-nav{
+  display:flex;justify-content:space-between;
+  padding:14px 20px 28px;flex-shrink:0;
+  border-top:1px solid var(--border);
+}
+.btn-nav{
+  display:flex;align-items:center;gap:6px;
+  height:44px;padding:0 20px;border:1.5px solid var(--border);
+  border-radius:12px;background:transparent;font-size:14px;
+  cursor:pointer;transition:background .15s;
+}
+.btn-nav:active{background:var(--primary)}
+.btn-nav svg{color:var(--text)}
+.btn-nav-next{
+  border-color:var(--accent);color:var(--accent);
+}
+.btn-nav-next:active{background:var(--accent);color:#fff}
+.btn-nav-next svg{color:currentColor}
+
+/* ====== Page 3 Traits ====== */
+.desc-area{
+  width:100%;min-height:100px;padding:12px 14px;
+  border:1.5px solid var(--border);border-radius:12px;
+  font-size:14px;line-height:1.8;resize:vertical;outline:none;
+  background:var(--card);
+}
+.desc-area:focus{border-color:var(--accent)}
+.trait-section{margin-top:8px}
+.trait-label{
+  display:flex;align-items:center;gap:8px;margin-bottom:8px;
+  font-size:14px;font-weight:500;
+}
+.btn-info{
+  width:24px;height:24px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--accent);
+}
+.trait-scroll{
+  display:flex;gap:8px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:6px;
+  scrollbar-width:none;
+}
+.trait-scroll::-webkit-scrollbar{display:none}
+.trait-chip{
+  padding:9px 18px;border:1.5px solid var(--border);
+  border-radius:20px;font-size:13px;white-space:nowrap;
+  cursor:pointer;transition:all .18s;flex-shrink:0;
+  background:var(--card);
+}
+.trait-chip:active,.trait-chip.selected{
+  border-color:var(--accent);background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;
+}
+
+/* ====== Modal ====== */
+.modal{
+  position:fixed;inset:0;z-index:9800;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.3);backdrop-filter:blur(4px);
+}
+.modal-box{
+  width:90%;max-width:380px;max-height:80vh;
+  background:var(--card);border-radius:18px;
+  display:flex;flex-direction:column;overflow:hidden;
+  animation:modalPop .22s ease;
+  box-shadow:var(--shadow);
+}
+@keyframes modalPop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  font-size:16px;font-weight:500;flex-shrink:0;
+}
+.modal-body{
+  padding:20px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  font-size:14px;line-height:1.8;color:var(--text);
+}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.btn-del{border-color:#e55;color:#e55;margin-top:8px}
+.btn-del:active{background:#e55;color:#fff}
+
+/* ====== Info list in modal ====== */
+.info-item{margin-bottom:16px}
+.info-item-title{font-weight:600;color:var(--accent);margin-bottom:4px}
+.info-item-desc{color:var(--text-light);font-size:13px;line-height:1.7}
+
+/* ====== char detail in modal ====== */
+.detail-row{margin-bottom:10px}
+.detail-label{font-size:12px;color:var(--text-light)}
+.detail-value{font-size:14px;margin-top:2px}
+
+/* ====== Toast ====== */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  padding:10px 24px;border-radius:20px;
+  background:rgba(0,0,0,.7);color:#fff;font-size:13px;
+  z-index:99999;white-space:nowrap;
+  animation:toastIn .25s ease;
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ====== Scrollbar ====== */
+::-webkit-scrollbar{width:3px}
+                        ::-webkit-scrollbar-thumb{background:var(--primary);border-radius:4px}
+                        
+                        /* ============================================================
+   State & Data
+============================================================ */
+const S = {
+  characters: JSON.parse(localStorage.getItem('mm_chars') || '[]'),
+  editGender: '女',
+  currentViewChar: null,
+};
+
+// ---- Trait Data ----
+const TRAITS = {
+  female: {
+    eye: [
+      { name: '杏眼', desc: '眼如杏核，圆润有神，给人以纯真无邪、温柔可爱的感觉。是古典美人的标志性眼型。' },
+      { name: '丹凤眼', desc: '眼尾上翘，眼形修长，英气与妩媚并存。自带威严气场，又不失女性柔美。' },
+      { name: '桃花眼', desc: '眼尾微垂，含情脉脉，天生自带魅惑气质。笑起来仿佛桃花盛开，令人心动。' },
+      { name: '瑞凤眼', desc: '形似凤目，细长上扬，端庄大气。透露出高贵优雅的气质，令人过目难忘。' },
+      { name: '狐狸眼', desc: '眼尾上挑，媚态天成，灵动狡黠。一眼万年的魅力，让人深陷其中。' },
+      { name: '鹿眼', desc: '圆而清澈，如小鹿般纯净无辜。给人以清新脱俗、楚楚可怜之感。' },
+      { name: '猫眼', desc: '眼形微圆，眼尾上翘，慵懒而神秘。时而高冷时而娇俏，充满魅力。' },
+      { name: '圆眼', desc: '大而圆润，明亮有神，活泼灵动。给人以开朗热情、元气满满的印象。' },
+    ],
+    hair: ['超短发','短发','齐肩','中长发','长发','及腰长发','超长发'],
+    body: ['平坦','微隆','适中','丰满','饱满'],
+    bodyLabel: '胸部丰满程度',
+    scent: [
+      { name: '奶香', desc: '天生自带的淡淡奶甜气息，温柔而治愈，让人忍不住想要靠近。如同温暖的拥抱。' },
+      { name: '花香', desc: '清雅的花卉芬芳，如栀子、茉莉般沁人心脾。举手投足间散发着优雅气质。' },
+      { name: '果香', desc: '清新甜美的水果气息，如蜜桃、青苹果般活力四射。充满青春与朝气。' },
+      { name: '茶香', desc: '淡雅的茶韵清香，如龙井、白茶般悠远绵长。给人以知性温婉的印象。' },
+      { name: '木质香', desc: '温润的木质调香气，如檀香、雪松般沉稳内敛。神秘而富有魅力。' },
+      { name: '清甜香', desc: '似有若无的清甜气息，如晨露般纯净。不经意间让人沉醉，回味无穷。' },
+    ],
+    defaults: '肤色白皙如瓷，鼻子小巧玲珑，唇形柔软润泽如花瓣，下巴肩颈锁骨线条优美流畅，腰部纤细盈盈一握，双腿修长笔直，一双玉足精致小巧。',
+  },
+  male: {
+    eye: [
+      { name: '剑眉星目', desc: '英气逼人，目光如炬，让人移不开视线。天生的主角光环。' },
+      { name: '深邃眼', desc: '深沉内敛，仿佛藏着道不尽的故事，极具吸引力。' },
+      { name: '狭长眼', desc: '锐利而富有攻击性，禁欲感十足，充满危险的魅力。' },
+      { name: '温润眼', desc: '目光柔和，如春风般温暖，让人不自觉地放下防备。' },
+      { name: '桃花眼', desc: '含情脉脉，风流倜傥，一个眼神便能俘获人心。' },
+      { name: '鹰眼', desc: '锐利精准，充满力量感与掌控欲，令人心生敬畏。' },
+    ],
+    hair: ['寸头','短发','中短发','中长发','长发','束发'],
+    body: ['精瘦','匀称','健壮','魁梧','肌肉型'],
+    bodyLabel: '体格',
+    scent: [
+      { name: '清冽', desc: '如冰雪般清冷的气息，禁欲而高贵，让人心生向往。' },
+      { name: '木质', desc: '沉稳的木质调，成熟而富有魅力，如同可靠的港湾。' },
+      { name: '烟草', desc: '微微的烟草气息，增添几分危险与神秘，令人欲罢不能。' },
+      { name: '海洋', desc: '清新的海洋气息，阳光而自由，让人联想到广阔的天空与大海。' },
+      { name: '皮革', desc: '皮革的质感气息，野性而迷人，散发着不羁与力量。' },
+    ],
+    defaults: '肤色小麦色健康有光泽，鼻梁高挺如刀削，唇线分明薄厚适中，下颌线硬朗分明，肩宽腰窄倒三角身材，手指修长骨节分明而有力。',
+  }
+};
+
+// ---- Built-in Fonts ----
+const FONTS = [
+  { name: 'Noto Sans SC', family: "'Noto Sans SC', sans-serif", label: '思源黑体' },
+  { name: 'ZCOOL XiaoWei', family: "'ZCOOL XiaoWei', serif", label: '站酷小薇' },
+  { name: 'Ma Shan Zheng', family: "'Ma Shan Zheng', cursive", label: '马善政楷体' },
+  { name: 'ZCOOL QingKe HuangYou', family: "'ZCOOL QingKe HuangYou', cursive", label: '站酷庆科黄油体' },
+  { name: 'Long Cang', family: "'Long Cang', cursive", label: '龙藏体' },
+];
+
+/* ============================================================
+   Helpers
+============================================================ */
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+function show(el) { el.classList.remove('hide'); }
+function hide(el) { el.classList.add('hide'); }
+function toast(msg, ms = 1800) {
+  const t = $('#toast');
+  t.textContent = msg;
+  show(t);
+  clearTimeout(t._t);
+  t._t = setTimeout(() => hide(t), ms);
+}
+
+/* ============================================================
+   Floating Ball — Drag
+============================================================ */
+(function initBall() {
+  const ball = $('#floatBall');
+  let sx, sy, bx, by, moved;
+  function onStart(e) {
+    const p = e.touches ? e.touches[0] : e;
+    sx = p.clientX; sy = p.clientY;
+    const r = ball.getBoundingClientRect();
+    bx = r.left; by = r.top;
+    moved = false;
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onEnd);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+  }
+  function onMove(e) {
+    e.preventDefault();
+    const p = e.touches ? e.touches[0] : e;
+    const dx = p.clientX - sx, dy = p.clientY - sy;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+    let nx = bx + dx, ny = by + dy;
+    nx = Math.max(0, Math.min(window.innerWidth - 52, nx));
+    ny = Math.max(0, Math.min(window.innerHeight - 52, ny));
+    ball.style.left = nx + 'px';
+    ball.style.top = ny + 'px';
+    ball.style.right = 'auto';
+    ball.style.bottom = 'auto';
+  }
+  function onEnd() {
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onEnd);
+    if (!moved) toggleBallMenu();
+  }
+  ball.addEventListener('touchstart', onStart, { passive: false });
+  ball.addEventListener('mousedown', onStart);
+})();
+
+function toggleBallMenu() {
+  const m = $('#ballMenu');
+  m.classList.contains('hide') ? show(m) : hide(m);
+}
+$('.bm-mask').addEventListener('click', () => hide($('#ballMenu')));
+
+/* ============================================================
+   Panel Open / Close
+============================================================ */
+$$('.bm-item').forEach(el => {
+  el.addEventListener('click', () => {
+    const id = el.dataset.panel;
+    if (id) { show($('#' + id)); hide($('#ballMenu')); }
+  });
+});
+$$('[data-close]').forEach(el => {
+  el.addEventListener('click', () => {
+    const panel = el.closest('.panel');
+    if (panel) hide(panel);
+  });
+});
+$$('[data-close-modal]').forEach(el => {
+  el.addEventListener('click', () => {
+    const modal = el.closest('.modal');
+    if (modal) hide(modal);
+  });
+});
+
+/* ============================================================
+   API 配置
+============================================================ */
+(function initAPI() {
+  const saved = JSON.parse(localStorage.getItem('mm_api') || '{}');
+  if (saved.url) $('#apiUrl').value = saved.url;
+  if (saved.key) $('#apiKey').value = saved.key;
+  if (saved.model) {
+    const opt = document.createElement('option');
+    opt.value = saved.model; opt.textContent = saved.model; opt.selected = true;
+    $('#apiModel').appendChild(opt);
+  }
+})();
+$('#btnSaveApi').addEventListener('click', () => {
+  const cfg = {
+    url: $('#apiUrl').value.trim().replace(/\/+$/, ''),
+    key: $('#apiKey').value.trim(),
+    model: $('#apiModel').value,
+  };
+  localStorage.setItem('mm_api', JSON.stringify(cfg));
+  toast('API 配置已保存');
+});
+$('#btnFetchModels').addEventListener('click', async () => {
+  const url = $('#apiUrl').value.trim().replace(/\/+$/, '');
+  const key = $('#apiKey').value.trim();
+  if (!url || !key) return toast('请先填写地址和 Key');
+  try {
+    toast('正在抓取...');
+    const res = await fetch(url + '/v1/models', {
+      headers: { 'Authorization': 'Bearer ' + key }
+    });
+    const data = await res.json();
+    const models = (data.data || []).map(m => m.id).sort();
+    const sel = $('#apiModel');
+    sel.innerHTML = '';
+    if (!models.length) { sel.innerHTML = '<option value="">未找到模型</option>'; return toast('未找到模型'); }
+    models.forEach(id => {
+      const o = document.createElement('option');
+      o.value = id; o.textContent = id;
+      sel.appendChild(o);
+    });
+    toast('已抓取 ' + models.length + ' 个模型');
+  } catch (e) {
+    toast('抓取失败: ' + e.message);
+  }
+});
+
+/* ============================================================
+   笔记本
+============================================================ */
+$('#noteArea').value = localStorage.getItem('mm_note') || '';
+$('#btnSaveNote').addEventListener('click', () => {
+  localStorage.setItem('mm_note', $('#noteArea').value);
+  toast('笔记已保存');
+});
+
+/* ============================================================
+   代码编辑器
+============================================================ */
+$('#codeArea').addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const ta = e.target, s = ta.selectionStart;
+    ta.value = ta.value.substring(0, s) + '  ' + ta.value.substring(ta.selectionEnd);
+    ta.selectionStart = ta.selectionEnd = s + 2;
+  }
+});
+$('#btnCopyCode').addEventListener('click', () => {
+  navigator.clipboard.writeText($('#codeArea').value).then(() => toast('已复制'));
+});
+$('#btnClearCode').addEventListener('click', () => { $('#codeArea').value = ''; });
+
+/* ============================================================
+   颜色调配
+============================================================ */
+function applyColors() {
+  const r = document.documentElement.style;
+  r.setProperty('--primary', $('#colorPrimary').value);
+  r.setProperty('--bg', $('#colorBg').value);
+  r.setProperty('--text', $('#colorText').value);
+  r.setProperty('--accent', $('#colorAccent').value);
+  document.body.style.background = $('#colorBg').value;
+}
+['colorPrimary','colorBg','colorText','colorAccent'].forEach(id => {
+  const input = $('#' + id);
+  const prevId = 'prev' + id.charAt(5).toUpperCase() + id.slice(6);
+  input.addEventListener('input', () => {
+    const prev = document.getElementById(prevId);
+    if (prev) prev.style.background = input.value;
+  });
+});
+$('#btnApplyColor').addEventListener('click', () => { applyColors(); toast('配色已应用'); });
+
+// Theme save / load
+function loadThemes() {
+  const themes = JSON.parse(localStorage.getItem('mm_themes') || '[]');
+  const box = $('#savedThemes');
+  box.innerHTML = '';
+  themes.forEach((th, i) => {
+    const d = document.createElement('div');
+    d.className = 'theme-card';
+    d.innerHTML = `
+      <span class="theme-card-name">${th.name}</span>
+      <div class="theme-card-colors">
+        <span style="background:${th.primary}"></span>
+        <span style="background:${th.bg}"></span>
+        <span style="background:${th.text}"></span>
+        <span style="background:${th.accent}"></span>
+      </div>
+      <button class="theme-card-del" data-idx="${i}">x</button>
+    `;
+    d.addEventListener('click', (e) => {
+      if (e.target.classList.contains('theme-card-del')) {
+        themes.splice(+e.target.dataset.idx, 1);
+        localStorage.setItem('mm_themes', JSON.stringify(themes));
+        loadThemes();
+        toast('已删除');
+        return;
+      }
+      $('#colorPrimary').value = th.primary; $('#prevPrimary').style.background = th.primary;
+      $('#colorBg').value = th.bg; $('#prevBg').style.background = th.bg;
+      $('#colorText').value = th.text; $('#prevText').style.background = th.text;
+      $('#colorAccent').value = th.accent; $('#prevAccent').style.background = th.accent;
+      applyColors();
+      toast('已应用主题: ' + th.name);
+    });
+    box.appendChild(d);
+  });
+}
+loadThemes();
+$('#btnSaveTheme').addEventListener('click', () => {
+  const name = $('#themeName').value.trim();
+  if (!name) return toast('请输入主题名称');
+  const themes = JSON.parse(localStorage.getItem('mm_themes') || '[]');
+  themes.push({
+    name,
+    primary: $('#colorPrimary').value,
+    bg: $('#colorBg').value,
+    text: $('#colorText').value,
+    accent: $('#colorAccent').value,
+  });
+  localStorage.setItem('mm_themes', JSON.stringify(themes));
+  $('#themeName').value = '';
+  loadThemes();
+  toast('主题已保存');
+});
+
+/* ============================================================
+   字体更改
+============================================================ */
+let customFonts = JSON.parse(localStorage.getItem('mm_cfonts') || '[]');
+function renderFontList() {
+  const box = $('#fontList');
+  box.innerHTML = '';
+  const all = [...FONTS, ...customFonts.map(f => ({ family: `'${f.name}', sans-serif`, label: f.name, custom: true }))];
+  const current = getComputedStyle(document.documentElement).getPropertyValue('--font').trim();
+  all.forEach(f => {
+    const d = document.createElement('div');
+    d.className = 'font-item' + (current === f.family ? ' active' : '');
+    d.style.fontFamily = f.family;
+    d.textContent = f.label;
+    d.addEventListener('click', () => {
+      document.documentElement.style.setProperty('--font', f.family);
+      document.body.style.fontFamily = f.family;
+      localStorage.setItem('mm_font', f.family);
+      renderFontList();
+      $('#fontPreviewText').style.fontFamily = f.family;
+      toast('字体已切换');
+    });
+    box.appendChild(d);
+  });
+}
+renderFontList();
+// Restore saved font
+const savedFont = localStorage.getItem('mm_font');
+if (savedFont) {
+  document.documentElement.style.setProperty('--font', savedFont);
+  document.body.style.fontFamily = savedFont;
+}
+// Upload custom font
+$('#btnUploadFont').addEventListener('click', () => {
+  const file = $('#fontFile').files[0];
+  const name = $('#customFontName').value.trim();
+  if (!file || !name) return toast('请选择文件并填写名称');
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const base64 = e.target.result;
+    const face = new FontFace(name, `url(${base64})`);
+    face.load().then((loaded) => {
+      document.fonts.add(loaded);
+      customFonts.push({ name, data: base64 });
+      localStorage.setItem('mm_cfonts', JSON.stringify(customFonts));
+      renderFontList();
+      document.documentElement.style.setProperty('--font', `'${name}', sans-serif`);
+      document.body.style.fontFamily = `'${name}', sans-serif`;
+      toast('字体已上传并应用');
+    }).catch(() => toast('字体加载失败'));
+  };
+  reader.readAsDataURL(file);
+});
+// Load custom fonts on startup
+customFonts.forEach(f => {
+  const face = new FontFace(f.name, `url(${f.data})`);
+  face.load().then(l => document.fonts.add(l)).catch(() => {});
+});
+
+/* ============================================================
+   背景图片
+============================================================ */
+$('#bgFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    $('#bgPreview').style.backgroundImage = `url(${ev.target.result})`;
+    $('#bgPreview').textContent = '';
+    $('#bgPreview').dataset.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+$('#btnApplyBg').addEventListener('click', () => {
+  const src = $('#bgPreview').dataset.src;
+  if (!src) return toast('请先选择图片');
+  $('#desktop').style.backgroundImage = `url(${src})`;
+  localStorage.setItem('mm_bg', src);
+  toast('背景已设置');
+});
+$('#btnRemoveBg').addEventListener('click', () => {
+  $('#desktop').style.backgroundImage = '';
+  localStorage.removeItem('mm_bg');
+  $('#bgPreview').style.backgroundImage = '';
+  $('#bgPreview').dataset.src = '';
+  toast('背景已移除');
+});
+// Restore bg
+const savedBg = localStorage.getItem('mm_bg');
+if (savedBg) $('#desktop').style.backgroundImage = `url(${savedBg})`;
+
+/* ============================================================
+   角色卡应用
+============================================================ */
+// Open
+$('#appCharacter').addEventListener('click', () => {
+  show($('#charApp'));
+  showCharPage(1);
+  renderCharList();
+});
+$('#btnExitApp').addEventListener('click', () => hide($('#charApp')));
+
+function showCharPage(n) {
+  [1, 2, 3].forEach(i => {
+    const p = $('#charPage' + i);
+    i === n ? show(p) : hide(p);
+  });
+}
+
+// Page nav
+$('#btnCreateChar').addEventListener('click', () => {
+  $('#charName').value = '';
+  $('#charAge').value = '';
+  $('#charHeight').value = '';
+  $$('input[name="charGender"]')[0].checked = true;
+  showCharPage(2);
+});
+$('#btnBack1').addEventListener('click', () => showCharPage(1));
+$('#btnNext2').addEventListener('click', () => {
+  if (!$('#charName').value.trim()) return toast('请输入名称');
+  S.editGender = document.querySelector('input[name="charGender"]:checked').value;
+  buildTraitPage();
+  showCharPage(3);
+});
+$('#btnBack2').addEventListener('click', () => showCharPage(2));
+
+// Build trait page based on gender
+function buildTraitPage() {
+  const g = S.editGender === '女' ? 'female' : 'male';
+  const data = TRAITS[g];
+  $('#page3Title').textContent = '创建形象 · ' + S.editGender + '性向';
+  $('#trait3Label').textContent = data.bodyLabel;
+  $('#trait4Label').textContent = g === 'female' ? '体香' : '气息';
+  $('#charDesc').value = '';
+
+  // Eye
+  const eyeBox = $('#eyeOptions');
+  eyeBox.innerHTML = '';
+  data.eye.forEach(e => {
+    const chip = document.createElement('div');
+    chip.className = 'trait-chip';
+    chip.textContent = e.name;
+    chip.addEventListener('click', () => {
+      eyeBox.querySelectorAll('.trait-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    });
+    eyeBox.appendChild(chip);
+  });
+
+  // Hair
+  const hairBox = $('#hairOptions');
+  hairBox.innerHTML = '';
+  data.hair.forEach(h => {
+    const chip = document.createElement('div');
+    chip.className = 'trait-chip';
+    chip.textContent = h;
+    chip.addEventListener('click', () => {
+      hairBox.querySelectorAll('.trait-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    });
+    hairBox.appendChild(chip);
+  });
+
+  // Body
+  const bodyBox = $('#bodyOptions');
+  bodyBox.innerHTML = '';
+  data.body.forEach(b => {
+    const chip = document.createElement('div');
+    chip.className = 'trait-chip';
+    chip.textContent = b;
+    chip.addEventListener('click', () => {
+      bodyBox.querySelectorAll('.trait-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    });
+    bodyBox.appendChild(chip);
+  });
+
+  // Scent
+  const scentBox = $('#scentOptions');
+  scentBox.innerHTML = '';
+  data.scent.forEach(s => {
+    const chip = document.createElement('div');
+    chip.className = 'trait-chip';
+    chip.textContent = s.name;
+    chip.addEventListener('click', () => {
+      scentBox.querySelectorAll('.trait-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    });
+    scentBox.appendChild(chip);
+  });
+}
+
+// Info buttons
+$$('.btn-info').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const trait = btn.dataset.trait;
+    const g = S.editGender === '女' ? 'female' : 'male';
+    const data = TRAITS[g];
+    let items;
+    if (trait === 'eye') {
+      $('#infoModalTitle').textContent = '眼型详解';
+      items = data.eye;
+    } else {
+      $('#infoModalTitle').textContent = (g === 'female' ? '体香' : '气息') + '详解';
+      items = data.scent;
+    }
+    const body = $('#infoModalBody');
+    body.innerHTML = items.map(i => `
+      <div class="info-item">
+        <div class="info-item-title">${i.name}</div>
+        <div class="info-item-desc">${i.desc}</div>
+      </div>
+    `).join('');
+    show($('#infoModal'));
+  });
+});
+
+// AI Generate
+$('#btnGenerate').addEventListener('click', async () => {
+  const cfg = JSON.parse(localStorage.getItem('mm_api') || '{}');
+  if (!cfg.url || !cfg.key || !cfg.model) return toast('请先在悬浮球中配置 API');
+
+  const g = S.editGender === '女' ? 'female' : 'male';
+  const data = TRAITS[g];
+  const eye = $('#eyeOptions .selected')?.textContent || '未选择';
+  const hair = $('#hairOptions .selected')?.textContent || '未选择';
+  const body = $('#bodyOptions .selected')?.textContent || '未选择';
+  const scent = $('#scentOptions .selected')?.textContent || '未选择';
+  const wc = $('#aiWordCount').value || 200;
+  const name = $('#charName').value;
+  const gender = S.editGender;
+
+  const prompt = `请为一个${gender}性角色"${name}"撰写外貌形象描述，大约${wc}字。
+特征如下：
+- 眼型：${eye}
+- 头发长度：${hair}
+- ${data.bodyLabel}：${body}
+- ${g === 'female' ? '体香' : '气息'}：${scent}
+- 默认特征：${data.defaults}
+要求：语言细腻、有画面感，描写从整体到细节。不要出现任何编号或标题，纯文字描述。`;
+
+  try {
+    toast('AI 生成中...');
+    const res = await fetch(cfg.url + '/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + cfg.key,
+      },
+      body: JSON.stringify({
+        model: cfg.model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.85,
+        max_tokens: +wc + 100,
+      }),
+    });
+    const json = await res.json();
+    const text = json.choices?.[0]?.message?.content || '生成失败';
+    $('#charDesc').value = text.trim();
+    toast('生成完成');
+  } catch (e) {
+    toast('生成失败: ' + e.message);
+  }
+});
+
+// Final confirm
+$('#btnConfirm').addEventListener('click', () => {
+  const name = $('#charName').value.trim();
+  if (!name) return toast('角色名称不能为空');
+
+  const g = S.editGender === '女' ? 'female' : 'male';
+  const char = {
+    id: Date.now(),
+    name,
+    age: $('#charAge').value,
+    height: $('#charHeight').value,
+    gender: S.editGender,
+    eye: $('#eyeOptions .selected')?.textContent || '',
+    hair: $('#hairOptions .selected')?.textContent || '',
+    body: $('#bodyOptions .selected')?.textContent || '',
+    scent: $('#scentOptions .selected')?.textContent || '',
+    desc: $('#charDesc').value,
+    avatar: '',
+  };
+  S.characters.push(char);
+  localStorage.setItem('mm_chars', JSON.stringify(S.characters));
+  renderCharList();
+  showCharPage(1);
+  toast('角色已创建');
+});
+
+// Render character list
+function renderCharList() {
+  const box = $('#charList');
+  const empty = $('#charEmpty');
+  box.innerHTML = '';
+  if (!S.characters.length) { show(empty); return; }
+  hide(empty);
+
+  S.characters.forEach((ch, idx) => {
+    const card = document.createElement('div');
+    card.className = 'char-card';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'char-avatar';
+    if (ch.avatar) {
+      avatar.innerHTML = `<img src="${ch.avatar}" alt="">`;
+    } else {
+      avatar.innerHTML = `<div class="char-avatar-plus"><svg viewBox="0 0 24 24"><path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>`;
+    }
+    avatar.addEventListener('click', () => {
+      const inp = document.createElement('input');
+      inp.type = 'file'; inp.accept = 'image/*';
+      inp.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          ch.avatar = ev.target.result;
+          localStorage.setItem('mm_chars', JSON.stringify(S.characters));
+          renderCharList();
+          toast('头像已更新');
+        };
+        reader.readAsDataURL(file);
+      });
+      inp.click();
+    });
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'char-card-name';
+    nameEl.textContent = ch.name;
+    nameEl.addEventListener('click', () => showCharDetail(ch));
+
+    card.appendChild(avatar);
+    card.appendChild(nameEl);
+    box.appendChild(card);
+  });
+}
+renderCharList();
+
+// Show character detail
+function showCharDetail(ch) {
+  S.currentViewChar = ch;
+  $('#charModalTitle').textContent = ch.name;
+  const body = $('#charModalBody');
+  const fields = [
+    ['名称', ch.name],
+    ['性别', ch.gender],
+    ['年龄', ch.age],
+    ['身高', ch.height ? ch.height + ' cm' : ''],
+    ['眼型', ch.eye],
+    ['头发长度', ch.hair],
+    [ch.gender === '女' ? '胸部丰满程度' : '体格', ch.body],
+    [ch.gender === '女' ? '体香' : '气息', ch.scent],
+    ['形象描述', ch.desc],
+  ];
+  body.innerHTML = fields
+    .filter(f => f[1])
+    .map(f => `<div class="detail-row"><div class="detail-label">${f[0]}</div><div class="detail-value">${f[1]}</div></div>`)
+    .join('');
+  show($('#charModal'));
+}
+
+// Copy character
+$('#btnCopyChar').addEventListener('click', () => {
+  if (!S.currentViewChar) return;
+  const ch = S.currentViewChar;
+  const text = [
+    `名称：${ch.name}`,
+    `性别：${ch.gender}`,
+    ch.age ? `年龄：${ch.age}` : '',
+    ch.height ? `身高：${ch.height}cm` : '',
+    ch.eye ? `眼型：${ch.eye}` : '',
+    ch.hair ? `头发长度：${ch.hair}` : '',
+    ch.body ? `${ch.gender === '女' ? '胸部丰满程度' : '体格'}：${ch.body}` : '',
+    ch.scent ? `${ch.gender === '女' ? '体香' : '气息'}：${ch.scent}` : '',
+    ch.desc ? `\n形象描述：\n${ch.desc}` : '',
+  ].filter(Boolean).join('\n');
+  navigator.clipboard.writeText(text).then(() => toast('已复制到剪贴板'));
+});
+
+// Delete character
+$('#btnDeleteChar').addEventListener('click', () => {
+  if (!S.currentViewChar) return;
+  S.characters = S.characters.filter(c => c.id !== S.currentViewChar.id);
+  localStorage.setItem('mm_chars', JSON.stringify(S.characters));
+  hide($('#charModal'));
+  renderCharList();
+  toast('角色已删除');
+});
+
+// Restore saved colors
+const savedColors = localStorage.getItem('mm_themes_applied');
+if (savedColors) {
+  try {
+    const c = JSON.parse(savedColors);
+    if (c.primary) { document.documentElement.style.setProperty('--primary', c.primary); }
+  } catch(e) {}
+}
